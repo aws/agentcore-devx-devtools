@@ -10,9 +10,10 @@ The `.github/workflows/` directory contains reusable workflows. Each is invoked 
 callers retain their event triggers and repository-specific prompts.
 
 `workflow-metrics.yml` emits `WorkflowRunDuration` for a completed
-`workflow_run`. Callers provide the namespace, OS, and writer-role secret name,
-grant `id-token: write`, and pass `WORKFLOW_SECRETS_READER_ROLE_ARN`. Pin the
-workflow to a full commit SHA. The writer role needs `cloudwatch:PutMetricData`.
+`workflow_run`, with `WorkflowName`, `Branch`, `Result`, and `OS` dimensions.
+Callers provide the namespace, OS, and writer-role secret name, grant
+`id-token: write`, and pass `WORKFLOW_SECRETS_READER_ROLE_ARN`. Pin the workflow
+to a full commit SHA. The writer role needs `cloudwatch:PutMetricData`.
 
 ```yaml
 on:
