@@ -48,6 +48,7 @@ jobs:
           METRIC_NAMESPACE: ${{ inputs.namespace }}
           OS: ${{ inputs.os }}
           WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
           RESULT: ${{ github.event.workflow_run.conclusion }}
           RUN_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
           RUN_COMPLETED_AT: ${{ github.event.workflow_run.updated_at }}
@@ -58,6 +59,7 @@ jobs:
           fi
           metric_data=$(jq -nc \
             --arg workflow "$WORKFLOW_NAME" \
+            --arg branch "$BRANCH" \
             --arg result "${RESULT:-Unknown}" \
             --arg os "$OS" \
             --arg timestamp "$RUN_COMPLETED_AT" \
@@ -66,6 +68,7 @@ jobs:
               MetricName: "WorkflowRunDuration",
               Dimensions: [
                 {Name: "WorkflowName", Value: $workflow},
+                {Name: "Branch", Value: $branch},
                 {Name: "Result", Value: $result},
                 {Name: "OS", Value: $os}
               ],
