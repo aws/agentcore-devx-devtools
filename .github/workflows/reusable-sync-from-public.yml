@@ -118,6 +118,46 @@ jobs:
 
           UPSTREAM_URL="https://github.com/${UPSTREAM_REPO}"
 
+          # Push the already-committed sync merge at HEAD to a new branch and open a PR into <branch>.
+          open_sync_pr() {
+            local branch="$1"
+
+            local existing_pr
+            existing_pr=$(gh pr list --base "$branch" --state open --json number,headRefName \
+              --jq "[.[] | select(.headRefName | startswith(\"sync-${branch}-\"))][0].number // empty" 2>/dev/null || echo "")
+
+            if [ -n "$existing_pr" ]; then
+              echo "ℹ️  Sync PR #$existing_pr already exists, skipping"
+              return 0
+            fi
+
+            local pr_branch
+            pr_branch="sync-${branch}-$(date +%Y%m%d-%H%M%S)"
+            if ! git push origin "HEAD:refs/heads/$pr_branch"; then
+              echo "::error::Failed to push $pr_branch"
+              return 1
+            fi
+
+            if ! gh pr create \
+              --title "chore: sync $branch with public/$branch" \
+              --body "## Automated Sync
+
+          This PR was automatically created because \`public/$branch\` merged cleanly into \`$branch\`, but pushing directly to \`$branch\` was rejected (for example, by a rule requiring pull requests).
+
+          **Source:** \`$branch\` from [${UPSTREAM_REPO}](${UPSTREAM_URL})
+          **Target:** \`$branch\`
+
+          No conflicts. Review and merge this PR to complete the sync." \
+              --base "$branch" \
+              --head "$pr_branch"; then
+              echo "::error::Failed to create sync PR for $branch"
+              return 1
+            fi
+
+            echo "✅ Opened sync PR for $branch"
+            return 0
+          }
+
           sync_branch() {
             local branch="$1"
 
@@ -156,9 +196,15 @@ jobs:
             if git merge "public/$branch" --no-commit --no-ff; then
               git restore --source=HEAD --staged --worktree -- .github/workflows/
               git commit -m "chore: sync $branch with public/$branch"
-              git push origin "$branch"
-              echo "✅ $branch synced successfully"
-              return 0
+              if git push origin "$branch"; then
+                echo "✅ $branch synced successfully"
+                return 0
+              fi
+
+              # Direct pushes are rejected when the branch requires pull requests; open one instead.
+              echo "ℹ️  Push to $branch was rejected, opening a sync PR instead"
+              open_sync_pr "$branch"
+              return $?
             fi
 
             echo "⚠️  Conflict detected in $branch"
