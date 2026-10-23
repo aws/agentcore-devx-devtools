@@ -1,5 +1,5 @@
 # Reusable workflow: pr-labeler — auto-labels PRs by changed file paths via actions/labeler.
-# No caller inputs: the labeler config path is resolved after checkout from
+# The labeler config path is resolved after checkout from
 # `.github/labeler.yml` (or `.yaml`). Consumers use the v5+ `changed-files:` schema.
 # Used by the repos that run pr-labeler (see coverage matrix).
 #
@@ -23,6 +23,12 @@ name: Reusable - PR Labeler
 
 on:
   workflow_call:
+    inputs:
+      runner:
+        description: "Runner to use: 'ubuntu' (GitHub-hosted, default) or 'codebuild' (self-hosted CodeBuild fleet)"
+        required: false
+        type: string
+        default: ubuntu
 
 permissions:
   contents: read
@@ -31,7 +37,7 @@ permissions:
 jobs:
   label:
     name: Auto-label PR
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner == 'codebuild' && format('codebuild-agentcore-e2e-{0}-{1}', github.run_id, github.run_attempt) || 'ubuntu-latest' }}
     permissions:
       contents: read
       pull-requests: write
