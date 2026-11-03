@@ -46,7 +46,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Calculate PR size and apply label
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
@@ -144,7 +144,7 @@ jobs:
       pull-requests: read
       statuses: write
     steps:
-      - uses: amannn/action-semantic-pull-request@v6.1.1
+      - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

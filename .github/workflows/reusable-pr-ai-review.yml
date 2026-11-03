@@ -106,13 +106,13 @@ jobs:
 
       - name: Generate GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Add agentcore-harness-reviewing label
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr-number.outputs.number }}
         with:
@@ -146,7 +146,7 @@ jobs:
             });
 
       - name: Checkout caller repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Fetch Harness secrets from Secrets Manager
         if: inputs.secret_source == 'secrets-manager'
@@ -156,14 +156,14 @@ jobs:
           repo: HARNESS_AWS_ROLE_ARN, HARNESS_ARN
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ inputs.secret_source == 'github' && secrets.HARNESS_AWS_ROLE_ARN || env.HARNESS_AWS_ROLE_ARN }}
           aws-region: us-east-1
           unset-current-credentials: true
 
       - name: Set up Python 3.12 with uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         with:
           python-version: "3.12"
           activate-environment: true
@@ -183,7 +183,7 @@ jobs:
 
       - name: Remove agentcore-harness-reviewing label
         if: always()
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr-number.outputs.number }}
         with:
