@@ -46,7 +46,7 @@ jobs:
       # let actions/labeler resolve it from the workspace. Under
       # pull_request_target this checks out the base ref, NOT the untrusted PR head.
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
       # Resolve the labeler config path (consumers use the v5+ `changed-files:` schema).
       - name: Detect labeler config
@@ -63,7 +63,7 @@ jobs:
 
       # Mirrors the live `pr-labeler.yml`: actions/labeler@v6 + repo-token.
       - name: Label by changed files (labeler v6)
-        uses: actions/labeler@v6
+        uses: actions/labeler@b8dd2d9be0f68b860e7dae5dae7d772984eacd6d # v6.2.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: ${{ steps.detect.outputs.config-path }}

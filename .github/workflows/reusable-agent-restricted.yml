@@ -117,7 +117,7 @@ jobs:
     runs-on: ${{ inputs.runner == 'codebuild' && format('codebuild-agentcore-e2e-{0}-{1}', github.run_id, github.run_attempt) || 'ubuntu-latest' }}
     steps:
       - name: Fetch secrets from Secrets Manager
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           repo: AUTHORIZED_USERS, AWS_ROLE_ARN
@@ -137,7 +137,7 @@ jobs:
       # own files in the workspace. The strands-action composite and its runner scripts are NOT
       # taken from here — they're bundled with the centrally-hosted action in the devtools repo.
       - name: Checkout caller repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           repository: ${{ github.repository }}
           ref: ${{ github.sha }}
@@ -145,7 +145,7 @@ jobs:
 
       - name: Generate GitHub App Token
         id: app-token
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -153,7 +153,7 @@ jobs:
       - name: Run Strands Agent
         # Centralized action hosted in this devtools repo (a `uses: ./` local ref would
         # resolve against devtools from a reusable anyway, and the caller has no copy).
-        uses: aws/agentcore-devx-devtools/.github/actions/strands-action@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/strands-action@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           prompt: ${{ inputs.prompt || 'What are my active pull requests?' }}
           provider: ${{ inputs.provider || 'bedrock' }}

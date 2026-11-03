@@ -33,12 +33,12 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Fetch CloudWatch writer role from Secrets Manager
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@75989f65f7f193deaf83c237c36572d1a8f800b2
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           repo: ${{ inputs['role-secret-name'] }}
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ env[inputs['role-secret-name']] }}
           aws-region: ${{ inputs['aws-region'] }}

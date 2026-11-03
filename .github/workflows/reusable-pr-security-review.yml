@@ -100,7 +100,7 @@ jobs:
       - name: Check authorization
         id: auth
         if: github.event_name == 'pull_request_target'
-        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           subject: ${{ steps.subject.outputs.login }}
           required-permission: write
@@ -119,20 +119,20 @@ jobs:
       AWS_REGION: us-west-2
     steps:
       - name: Fetch secrets from Secrets Manager
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           shared: BEDROCK_SECURITY_REVIEW_ROLE_ARN
       - name: Generate GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Resolve PR
         id: pr
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER_INPUT: ${{ inputs.pr_number }}
         with:
@@ -163,7 +163,7 @@ jobs:
             core.setOutput('base_ref', pr.base.ref);
 
       - name: Add reviewing label
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr.outputs.number }}
         with:
@@ -195,7 +195,7 @@ jobs:
             });
 
       - name: Checkout PR head
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ steps.pr.outputs.head_sha }}
           fetch-depth: 0
@@ -227,7 +227,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: steps.diff.outputs.bytes != '0'
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ env.BEDROCK_SECURITY_REVIEW_ROLE_ARN }}
           aws-region: us-west-2
@@ -236,7 +236,7 @@ jobs:
       - name: Run Claude Code
         id: review
         if: steps.diff.outputs.bytes != '0'
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@6d5ae526d25ce88daa2200be073e1a373167f064 # v1
         with:
           github_token: ${{ steps.app-token.outputs.token }}
           use_bedrock: "true"
@@ -455,7 +455,7 @@ jobs:
 
       - name: Post summary
         if: always()
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr.outputs.number }}
           FINDING_COUNT: ${{ steps.findings.outputs.count }}
@@ -500,7 +500,7 @@ jobs:
 
       - name: Remove reviewing label
         if: always()
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr.outputs.number }}
         with:

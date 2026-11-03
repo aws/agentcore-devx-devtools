@@ -41,7 +41,7 @@ runs:
   steps:
     - name: Check collaborator authorization
       id: check
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         # Passed via env (not ${{ }} interpolation) so an attacker-controlled login
         # on pull_request_target cannot inject into the script body.

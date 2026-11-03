@@ -31,13 +31,13 @@ jobs:
     runs-on: ${{ inputs.runner == 'codebuild' && format('codebuild-agentcore-e2e-{0}-{1}', github.run_id, github.run_attempt) || 'ubuntu-latest' }}
     steps:
       - name: Fetch secrets from Secrets Manager
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           shared: SLACK_OPEN_PRS_WEBHOOK_URL
       - name: Get open PRs
         id: open-prs
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const { data: prs } = await github.rest.pulls.list({
@@ -63,7 +63,7 @@ jobs:
             );
 
       - name: Send open PRs summary to Slack
-        uses: slackapi/slack-github-action@v3.0.3
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
         with:
           webhook: ${{ env.SLACK_OPEN_PRS_WEBHOOK_URL }}
           webhook-type: webhook-trigger
