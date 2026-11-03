@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /.github/actions/check-collaborator
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /.github/actions/fetch-secrets
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /.github/actions/strands-action
+    schedule:
+      interval: weekly
