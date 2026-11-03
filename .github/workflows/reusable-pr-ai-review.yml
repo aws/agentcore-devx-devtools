@@ -66,7 +66,7 @@ jobs:
       - name: Check authorization
         id: auth
         if: github.event_name == 'pull_request_target'
-        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           subject: ${{ github.event.pull_request.user.login }}
           required-permission: write
@@ -150,7 +150,7 @@ jobs:
 
       - name: Fetch Harness secrets from Secrets Manager
         if: inputs.secret_source == 'secrets-manager'
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           repo: HARNESS_AWS_ROLE_ARN, HARNESS_ARN

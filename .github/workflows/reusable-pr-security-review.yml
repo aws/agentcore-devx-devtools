@@ -100,7 +100,7 @@ jobs:
       - name: Check authorization
         id: auth
         if: github.event_name == 'pull_request_target'
-        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           subject: ${{ steps.subject.outputs.login }}
           required-permission: write
@@ -119,7 +119,7 @@ jobs:
       AWS_REGION: us-west-2
     steps:
       - name: Fetch secrets from Secrets Manager
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           shared: BEDROCK_SECURITY_REVIEW_ROLE_ARN

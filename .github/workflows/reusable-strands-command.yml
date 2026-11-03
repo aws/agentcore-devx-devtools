@@ -73,7 +73,7 @@ jobs:
     runs-on: ${{ inputs.runner == 'codebuild' && format('codebuild-agentcore-e2e-{0}-{1}', github.run_id, github.run_attempt) || 'ubuntu-latest' }}
     steps:
       - name: Fetch secrets from Secrets Manager
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           repo: AWS_ROLE_ARN, AGENT_SESSIONS_BUCKET
@@ -82,7 +82,7 @@ jobs:
       - name: Check authorization
         id: authz
         if: github.event_name != 'workflow_dispatch'
-        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/check-collaborator@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           subject: ${{ github.event.comment.user.login }}
           required-permission: write
@@ -134,7 +134,7 @@ jobs:
       - name: Run Strands Agent
         # Centralized action hosted in this devtools repo (a `uses: ./` local ref would
         # resolve against devtools from a reusable anyway, and the caller has no copy).
-        uses: aws/agentcore-devx-devtools/.github/actions/strands-action@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/strands-action@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           prompt: ${{ steps.process-inputs.outputs.prompt }}
           system_prompt: ${{ steps.process-inputs.outputs.system_prompt }}

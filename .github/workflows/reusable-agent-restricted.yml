@@ -117,7 +117,7 @@ jobs:
     runs-on: ${{ inputs.runner == 'codebuild' && format('codebuild-agentcore-e2e-{0}-{1}', github.run_id, github.run_attempt) || 'ubuntu-latest' }}
     steps:
       - name: Fetch secrets from Secrets Manager
-        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/fetch-secrets@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           role-arn: ${{ secrets.WORKFLOW_SECRETS_READER_ROLE_ARN }}
           repo: AUTHORIZED_USERS, AWS_ROLE_ARN
@@ -153,7 +153,7 @@ jobs:
       - name: Run Strands Agent
         # Centralized action hosted in this devtools repo (a `uses: ./` local ref would
         # resolve against devtools from a reusable anyway, and the caller has no copy).
-        uses: aws/agentcore-devx-devtools/.github/actions/strands-action@31aa3b031a86664e29861d68956e44b07cf21a74
+        uses: aws/agentcore-devx-devtools/.github/actions/strands-action@e68d09b0c33dfb7a798448d50e6b48beedf00a3b
         with:
           prompt: ${{ inputs.prompt || 'What are my active pull requests?' }}
           provider: ${{ inputs.provider || 'bedrock' }}
