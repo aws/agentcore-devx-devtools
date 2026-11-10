@@ -5,7 +5,7 @@
 #
 # The merge excludes .github/workflows/, so each private repo retains its reviewed workflows.
 # The only repo-specific divergence is the upstream target and which branches to sync (the
-# CLI repo also mirrors `preview` in addition to `main`).
+# CLI repo mirrors `v0.x` and `v1.x`, the names the public CLI uses since it dropped `main`).
 #
 # Scope: this covers public-upstream sync ONLY. Internal branch promotion (e.g. main -> preview
 # with version/schema/CHANGELOG preservation) is a separate concern and is intentionally not
@@ -55,7 +55,7 @@ jobs:
               ;;
             "$CLI_PRIVATE_REPO_NAME")
               upstream_repo="aws/agentcore-cli"
-              branches="main preview"
+              branches="v0.x v1.x"
               ;;
             "$SDK_TS_PRIVATE_REPO_NAME")
               upstream_repo="aws/bedrock-agentcore-sdk-typescript"
