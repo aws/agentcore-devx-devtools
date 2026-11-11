@@ -158,6 +158,13 @@ jobs:
             return 0
           }
 
+          # git restore refuses unmerged paths, so on the conflict path it left conflicted
+          # workflows (markers included) and new upstream workflows in the commit.
+          keep_private_workflows() {
+            git rm -r -q -f --ignore-unmatch -- .github/workflows/
+            git checkout HEAD -- .github/workflows/
+          }
+
           sync_branch() {
             local branch="$1"
 
@@ -194,7 +201,7 @@ jobs:
 
             # Merge source changes while retaining the private repo's reviewed workflows.
             if git merge "public/$branch" --no-commit --no-ff; then
-              git restore --source=HEAD --staged --worktree -- .github/workflows/
+              keep_private_workflows
               git commit -m "chore: sync $branch with public/$branch"
               if git push origin "$branch"; then
                 echo "✅ $branch synced successfully"
@@ -228,7 +235,7 @@ jobs:
             git checkout -b "$conflict_branch"
 
             git merge "public/$branch" --no-commit --no-ff || true
-            git restore --source=HEAD --staged --worktree -- .github/workflows/
+            keep_private_workflows
             git add -A
             git commit -m "chore: sync $branch with public/$branch (conflicts present)
 
