@@ -29,7 +29,7 @@ permissions:
 
 jobs:
   emit-metric:
-    runs-on: codebuild-agentcore-e2e-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Fetch CloudWatch writer role from Secrets Manager
